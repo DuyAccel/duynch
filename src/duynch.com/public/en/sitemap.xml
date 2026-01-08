@@ -4,6 +4,7 @@
 
   <url>
     <loc>http://localhost:1313/en/</loc>
+    <lastmod>2026-01-08T17:59:33+07:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
     <xhtml:link
@@ -15,6 +16,38 @@
       rel="alternate"
       hreflang="en"
       href="http://localhost:1313/en/"
+    />
+  </url>
+  <url>
+    <loc>http://localhost:1313/en/posts/</loc>
+    <lastmod>2026-01-08T17:59:33+07:00</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.5</priority>
+    <xhtml:link
+      rel="alternate"
+      hreflang="vi"
+      href="http://localhost:1313/posts/"
+    />
+    <xhtml:link
+      rel="alternate"
+      hreflang="en"
+      href="http://localhost:1313/en/posts/"
+    />
+  </url>
+  <url>
+    <loc>http://localhost:1313/en/posts/website-with-cd-pipeline/</loc>
+    <lastmod>2024-09-01T13:59:07+00:00</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.5</priority>
+    <xhtml:link
+      rel="alternate"
+      hreflang="vi"
+      href="http://localhost:1313/posts/website-with-cd-pipeline/"
+    />
+    <xhtml:link
+      rel="alternate"
+      hreflang="en"
+      href="http://localhost:1313/en/posts/website-with-cd-pipeline/"
     />
   </url>
 </urlset>

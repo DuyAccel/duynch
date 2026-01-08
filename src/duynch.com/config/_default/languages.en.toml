@@ -2,13 +2,32 @@ disabled = false
 languageCode = "en"
 languageName = "English"
 weight = 1
-title = "Blowfish"
+title = "Duy Nguyen's site"
 
 [params]
   displayName = "EN"
   isoCode = "en"
   rtl = false
   dateFormat = "2 January 2006"
+
+  logo = "img/logo.png"
+  # secondaryLogo = "img/secondary-logo.png"
+  # description = "My awesome website"
+  # copyright = "Copy, _right?_ :thinking_face:"
+
+[params.author]
+  name = "Nguyen Chau Hieu Duy"
+  email = "duynch42204@sacombank.com"
+  image = "img/Avatar.png"
+  imageQuality = 96
+  headline = "System administrator at Sacombank."
+  bio = "Loading..."
+  links = [
+    { email = "mailto:duynch42204@sacombank.com" },
+    { facebook = "https://facebook.com/duy.Accel.02" },
+    { github = "https://github.com/DuyAccel" },
+  ]
+
   # logo = "img/logo.png"
   # secondaryLogo = "img/secondary-logo.png"
   # description = "My awesome website"
