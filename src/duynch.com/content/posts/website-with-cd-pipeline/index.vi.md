@@ -4,8 +4,7 @@ date: 2024-09-01T13:59:07Z
 draft: false
 author: Nguyễn Châu Hiếu Duy
 tags: ['CI/CD', 'Docker', Portfolio]
-image: /blogs/website-with-CD/automation.png
-description: Bài viết vỡ lòng khi mình bắt đầu tìm hiểu về deploy và CI/CD pipeline.
+summary: Bài viết vỡ lòng khi mình bắt đầu tìm hiểu về deploy và CI/CD pipeline.
 toc:
 ---
 *ps: website hồi đó mình làm đã bị đập đi xây lại thành như bây giờ nha :D*
@@ -23,8 +22,8 @@ Tiếp theo là Hugo, một công cụ cho phép build, dựng những trang web
 Tranh thủ khoảng thời gian 1 năm trial của AWS account, tôi sẽ host sản phẩm của mình lên đó.
 
 ## Xây dựng website nào
-![](/blogs/website-with-CD/hugo.png)
-### Install Hugo
+![](/posts/website-with-cd-pipeline/hugo.png)
+### Cài đặt Hugo
 
 Tôi sẽ dùng prebuilt binary của Hugo, bạn cũng có thể dễ dàng tải nó từ [hugo release page](https://github.com/gohugoio/hugo/releases). Một lưu ý là phải download phiên bản **extended** để có thể sử dụng các theme của Hugo. Sau đây là các command tôi dùng để tải và sử dụng Hugo. 
 
@@ -38,15 +37,17 @@ chmod +x hugo
 sudo cp hugo /usr/local/bin/    
 ```
 
-### Create hugo website and select theme
-You can follow [Hugo guide](https://gohugo.io/getting-started/quick-start/) to learn how to build your website. My theme is [hugo-profile](https://github.com/gurusabarish/hugo-profile) if you interest.
-> *If you are developing inside a container (like me), remember to re-bind the ip address to 0.0.0.0. So that, your hugo website can be accessed via host bind port:*
+Hãy tham khảo [Hugo guide](https://gohugo.io/getting-started/quick-start/) để tự thiết kế nội dung website. Hugo có một bộ sưu tập theme rất đa dạng do cộng đồng đóng góp. ở đây tôi sử dụng theme `Portfolio` với giao diện được cấu hình sẵn nhằm đơn giản hóa quá trình phát triển.
+
+Bài viết này sẽ tập trung vào việc cấu hình CI/CD pipeline nên chúng ta tiếp tục nào.
+
+> *Lưu ý nếu bạn dev ngay bên trong container (giống tôi) thì phải bind service của hugo lên ip 0.0.0.0 nhé. Bằng cách đó thì ta mới có thể map port vào host và truy cập vào webiste*
 ```
 hugo server --bind 0.0.0.0
 ```
-### Create docker image
-![](/blogs/website-with-CD/docker.png)
-After finish your website, lets containerize it with docker. Because using hugo development webservice is not recommend in production, I will `nginx`. Remember to move your `hugo-install` folder into your workspace because we need to use hugo binary file. Don't worry about image size since we can use docker multi-stage to copy only necesary files. 
+### Tạo Docker image
+![](/posts/website-with-cd-pipeline/docker.png)
+Sau khi đã xây dựng website, hãy đóng gói nó vào container nào. Theo như khuyến nghị của Hugo, không nên dùng webservice tích hợp sẵn trong binary của họ trên production. Vậy nên, tôi sử dụng nginx làm webservice cho sản phẩm của mình. Dưới đây là **Dockerfile** dùng multi-stage để build và copy những file do Hugo render ra vào một nginx image trống. Bằng cách này, ta có thể giảm nhẹ dung lượng của docker image và ít dependency trong image hơn cũng an toàn hơn.
 ```
 # Build stage.
 FROM alpine:3.20.2 AS builder
@@ -80,15 +81,18 @@ EXPOSE 80
 
 CMD ["nginx", "-g", "daemon off;"]
 ```
-## Setting CD pipeline
-![](/blogs/website-with-CD/github-action.png)
-In order to use Github Action, you need to create `.github/workflows` folder in root project (same folder with `.git`). Then, create a `.yml` file in `.github/workflows`. Our pipline consist of 4 main steps:
-- Download source code from repository.
-- Build image from source.
-- Push image into docker hub.
-- SSH into server, pull image and run container.
+## Cấu hình CD pipeline
+![](/posts/website-with-cd-pipeline/github-action.png)
 
-This is my `CD.yml` contain pipeline of those steps:
+Để sử dụng Github Action, ta sẽ cần tạo folder `.github/workflows` tạo root của project (cùng folder cha với `.git`). Sau đó, thêm một file `Yaml` vào trong, đây sẽ là file thiết lập cấu hình cho CI/CD pipeline.
+
+Tôi sẽ thiết kế pipeline gồm 4 giai đoạn sau: 
+- Tải source code từ repository.
+- Build image.
+- Đẩy image vào docker hub.
+- SSH vào trong server, kéo image về rồi chạy container.
+
+Sau đây là file `CD.yml` chứa các bước trên:
 ```
 name: Create and publish a Docker image
 on:
@@ -150,30 +154,32 @@ jobs:
             docker run -d --name portfolio -p 80:80 duyaccel/personal-web:main
            '
 ```
-If you wonder what is:
+Nếu bạn thắc mắc những **secret** này ở đâu ra:
 ```
-  ${{ secrets.DOCKER_TOKEN }}
-  SSH_KEY: ${{ secrets.SSH_KEY }}
-  SERVER: ${{ secrets.SERVER }}
-  SV_USER: ${{ secrets.SV_USER }}
+  ${{ secrets.DOCKER_TOKEN }}       # Token dùng để access dockerhub
+  SSH_KEY: ${{ secrets.SSH_KEY }}   # SSH key để truy cập server
+  SERVER: ${{ secrets.SERVER }}     # IP của server
+  SV_USER: ${{ secrets.SV_USER }}   # Username trên server
 ```
-![](/blogs/website-with-CD/secrets.png)
-The answer is github secrets, we will need to add them to github repository before execute pipeline. Go to `your repository -> Settings -> 
-Security -> Secrets and variables -> Actions` to add new secrets. What we need for this workflow are:
-- DOCKER_TOKEN: token to sign in docker accout (create in your docker account setting).
-- SSH_KEY: private key to SSH connect to your host.
-- SERVER: host ip address.
-- SV_USER: username of the host.
+![](/posts/website-with-cd-pipeline/secrets.png)
 
-## Execute pipeline
+Thì đáp án đó là github secrets, ta sẽ cần thêm chúng vào trong github repository trước khi thực thi pipeline. Đầu tiên hãy vào `your repository -> Settings -> 
+Security -> Secrets and variables -> Actions` sau đó thêm các secret trên vào. 
 
-Having `.github/workflows/CD.yml`, you just need to push code to your repository and wait for it to be executed. We can view the progress in `Actions tab` of the repository. 
-![](/blogs/website-with-CD/workflow.png)
-If nothing went wrong, you can find your website on your web browser by searching ip address/domain name. You can also ssh into host to check if your containers are working properly.
-![](/blogs/website-with-CD/website.png)
-## Conclusion
+## Thực thi pipeline
 
-In this post, I introduced the way I create an continuos deployment pipeline for my portfolio website using Github Action. Though it is accessable from internet, the security warnings are really annoying. In the future, I will add SSL certificate for my website via something like reverse proxy to manage more webservices. Do you looking forward to it? By the way, thanks for reading, see you in next posts.
+Khi đã có `.github/workflows/CD.yml`, tôi chỉ cần push code lên repository và chờ cho pipeline thực thi. Hãy nhâm nhi tách trà và theo dõi tiến độ trên tab `Actions` của repository trên github. 
+
+![](/posts/website-with-cd-pipeline/workflow.png)
+
+Nếu mọi chuyện suông sẻ, bạn sẽ tìm thấy website ngay trên browser bằng cách search ip address/domain name. Chắc ăn hơn thì hãy ssh vào server để kiểm tra tình trạng của container.
+![](/posts/website-with-cd-pipeline/website.png)
+## Kết luận
+
+Trong bài viết này, tôi đã trình bày các mà mình dùng Github Action làm công cụ tạo cd pipeline cho portfolio website của bản thân. Về cơ bản website và pipeline hoạt động tốt, nhưng tốt hơn ta nên có một reverse proxy phía trước nhằm xử lý ssl, routing traffic khi ta có nhiều hơn 1 ứng dụng cần được host.
+
+
+Tôi sẽ thêm các điểm trên vào `Todo List cho tương lai`, còn bây giờ, cảm ơn bạn đã dành thời gian đọc bài viết này. Hẹn gặp lại ở những bài viết tiếp theo.
 
 ---
 References:
