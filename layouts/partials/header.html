@@ -8,8 +8,17 @@
     {{ end }}
     
     <div class="lang-switcher">
+      {{ $ctx := . }}
       {{ range .Site.Home.AllTranslations }}
-        <a href="{{ .Permalink }}" class="lang-toggle {{ if eq .Lang $.Site.Language.Lang }}active{{ end }}">{{ .Language.Label }}</a>
+        {{ $targetLink := .Permalink }}
+        {{ $outerLang := .Language.Lang }}
+        {{ $outerLabel := .Language.Label }}
+        {{ range $ctx.AllTranslations }}
+          {{ if eq .Language.Lang $outerLang }}
+            {{ $targetLink = .Permalink }}
+          {{ end }}
+        {{ end }}
+        <a href="{{ $targetLink }}" class="lang-toggle {{ if eq $outerLang $ctx.Language.Lang }}active{{ end }}">{{ $outerLabel }}</a>
       {{ end }}
     </div>
 

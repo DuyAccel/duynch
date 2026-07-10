@@ -27,7 +27,7 @@ Tranh thủ khoảng thời gian 1 năm trial của AWS account, tôi sẽ host 
 
 Tôi sẽ dùng prebuilt binary của Hugo, bạn cũng có thể dễ dàng tải nó từ [hugo release page](https://github.com/gohugoio/hugo/releases). Một lưu ý là phải download phiên bản **extended** để có thể sử dụng các theme của Hugo. Sau đây là các command tôi dùng để tải và sử dụng Hugo. 
 
-```
+```bash
 mkdir ~/hugo-install
 cd ~/hugo-install
 wget https://github.com/gohugoio/hugo/releases/download/v0.133.1/hugo_extended_0.133.1_linux-amd64.tar.gz
@@ -42,13 +42,13 @@ Hãy tham khảo [Hugo guide](https://gohugo.io/getting-started/quick-start/) đ
 Bài viết này sẽ tập trung vào việc cấu hình CI/CD pipeline nên chúng ta tiếp tục nào.
 
 > *Lưu ý nếu bạn dev ngay bên trong container (giống tôi) thì phải bind service của hugo lên ip 0.0.0.0 nhé. Bằng cách đó thì ta mới có thể map port vào host và truy cập vào webiste*
-```
+```bash
 hugo server --bind 0.0.0.0
 ```
 ### Tạo Docker image
 ![](/images/website-with-cd-pipeline/docker.png)
 Sau khi đã xây dựng website, hãy đóng gói nó vào container nào. Theo như khuyến nghị của Hugo, không nên dùng webservice tích hợp sẵn trong binary của họ trên production. Vậy nên, tôi sử dụng nginx làm webservice cho sản phẩm của mình. Dưới đây là **Dockerfile** dùng multi-stage để build và copy những file do Hugo render ra vào một nginx image trống. Bằng cách này, ta có thể giảm nhẹ dung lượng của docker image và ít dependency trong image hơn cũng an toàn hơn.
-```
+```dockerfile
 # Build stage.
 FROM alpine:3.20.2 AS builder
 
@@ -93,7 +93,7 @@ Tôi sẽ thiết kế pipeline gồm 4 giai đoạn sau:
 - SSH vào trong server, kéo image về rồi chạy container.
 
 Sau đây là file `CD.yml` chứa các bước trên:
-```
+```yaml
 name: Create and publish a Docker image
 on:
   push:
@@ -155,7 +155,7 @@ jobs:
            '
 ```
 Nếu bạn thắc mắc những **secret** này ở đâu ra:
-```
+```yaml
   ${{ secrets.DOCKER_TOKEN }}       # Token dùng để access dockerhub
   SSH_KEY: ${{ secrets.SSH_KEY }}   # SSH key để truy cập server
   SERVER: ${{ secrets.SERVER }}     # IP của server
