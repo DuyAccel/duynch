@@ -1,0 +1,22 @@
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{ if .IsHome }}{{ .Site.Title }}{{ else }}{{ .Title }} | {{ .Site.Title }}{{ end }}</title>
+  
+  {{ $style := resources.Get "scss/main.scss" | toCSS | minify }}
+  <link rel="stylesheet" href="{{ $style.RelPermalink }}">
+  
+  <script>
+    // Theme toggle logic
+    function getTheme() {
+      if (localStorage.getItem('theme')) {
+        return localStorage.getItem('theme');
+      }
+      if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        return 'dark';
+      }
+      return 'light';
+    }
+    document.documentElement.setAttribute('data-theme', getTheme());
+  </script>
+</head>

@@ -1,0 +1,30 @@
+---
+title: "Trang chủ"
+experiences:
+  - title: "Sinh viên IT (Computer Science Major)"
+    company: "Saigon University"
+    duration: "Tháng 10 2020 - Tháng 10 2024"
+    description: "Học hỏi nền tảng kiến thức vững chắc về CNTT và Khoa học máy tính."
+    image: "https://ttnnth-tinhoc.sgu.edu.vn/wp-content/uploads/2018/11/SGU-LOGO.png"
+  - title: "System Administrator"
+    company: "Sacombank"
+    duration: "Tháng 10 2024 - Hiện tại"
+    description: "Quản trị hệ thống Cloud Native, Linux và các nền tảng tự động hóa."
+    image: "https://www.sacombank.com.vn/content/dam/sacombank/cdn/logo_sacombank_bg_white.svg"
+certificates:
+  - name: "Red Hat Certified Openshift Administrator"
+    issuer: "Red Hat"
+    date: "17 Tháng 3, 2026"
+    image: "https://images.credly.com/size/680x680/images/e7a34dc0-feb1-44a1-b8e7-3f825faf1c8e/blob"
+    link: "https://www.credly.com/badges/71760755-c435-4b38-99b1-2eb19c018eca"
+  - name: "Red Hat Certified System Administrator (RHCSA)"
+    issuer: "Red Hat"
+    date: "05 Tháng 3, 2026"
+    image: "https://images.credly.com/size/680x680/images/572de0ba-2c59-4816-a59d-b0e1687e45ee/image.png"
+    link: "https://www.credly.com/badges/fb61b32d-882e-4e0d-a4b6-2b4da16a3ccf"
+  - name: "TOEIC 850"
+    issuer: "IIG"
+    date: "Tháng 7, 2024"
+    image: "https://yt3.googleusercontent.com/nC6G94Tnv4zEUFVbXvf_4miYSV2fntdp1pqjpbcHDe9S4BjJOZH_oi5dSWHhfuipSjc9e4DBwA=s900-c-k-c0x00ffffff-no-rj"
+---
+Xin chào, tôi là Nguyễn Châu Hiếu Duy. Tôi là một System Administrator chuyên về Cloud Native, OpenShift(Kubernetes) và Linux. Hiện tôi đang công tác tại Sacombank, tập trung vào việc triển khai hệ thống giám sát tự động và đảm bảo tính an toàn, khả dụng cao cho hạ tầng cốt lõi.
