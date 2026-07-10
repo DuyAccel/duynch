@@ -1,0 +1,78 @@
+{{ define "main" }}
+<div class="hero">
+  <div class="hero-content">
+    <h1 class="gradient-text">{{ .Site.Params.author }}</h1>
+    <h2 class="subtitle">{{ .Site.Title }}</h2>
+    <div class="hero-description">
+      {{ .Content }}
+    </div>
+    <div class="hero-actions">
+      <a href="{{ .Site.Params.socials.linkedin }}" target="_blank" class="btn btn-primary">LinkedIn</a>
+      <a href="{{ .Site.Params.socials.github }}" target="_blank" class="btn btn-outline">GitHub</a>
+    </div>
+  </div>
+  <div class="hero-image-wrapper">
+    <img src="{{ .Site.Params.avatar }}" alt="{{ .Site.Params.author }}" class="floating-avatar">
+  </div>
+</div>
+
+{{ if .Params.experiences }}
+<div class="section-experiences">
+  <h2>{{ i18n "working_experiences" | default "Experiences" }}</h2>
+  <div class="timeline">
+    {{ range .Params.experiences }}
+    <div class="timeline-item">
+      <div class="timeline-dot"></div>
+      <div class="timeline-content">
+        {{ if .image }}<img src="{{ .image }}" alt="{{ .company }}" class="timeline-image">{{ end }}
+        <div class="timeline-text">
+          <h3>{{ .title }} at {{ .company }}</h3>
+          <span class="timeline-date">{{ .duration }}</span>
+          <p>{{ .description }}</p>
+        </div>
+      </div>
+    </div>
+    {{ end }}
+  </div>
+</div>
+{{ end }}
+
+{{ if .Params.certificates }}
+<div class="section-certificates">
+  <h2>{{ i18n "certificates" | default "Certificates" }}</h2>
+  <div class="card-grid">
+    {{ range .Params.certificates }}
+    {{ if .link }}<a href="{{ .link }}" target="_blank" class="card">{{ else }}<div class="card">{{ end }}
+        {{ if .image }}<img src="{{ .image }}" alt="{{ .name }}"
+          style="object-fit: contain; background: white; padding: 10px;">{{ end }}
+        <div class="card-content">
+          <h3>{{ .name }}</h3>
+          <p>{{ .issuer }}</p>
+          {{ if .date }}<p>Issued: {{ .date }}</p>{{ end }}
+        </div>
+        {{ if .link }}</a>{{ else }}</div>{{ end }}
+  {{ end }}
+</div>
+</div>
+{{ end }}
+
+<div class="section-recent-posts">
+  <h2>{{ i18n "recent_posts" | default "Recent Posts" }}</h2>
+  <div class="card-grid">
+    {{ range first 6 (where .Site.RegularPages "Type" "blog") }}
+    <a href="{{ .Permalink }}" class="card">
+      {{ if .Params.image }}
+      <img src="{{ .Params.image }}" alt="{{ .Title }}">
+      {{ else }}
+      <img src="https://via.placeholder.com/400x200/5c5f77/eff1f5.png?text=Draft" alt="Placeholder">
+      {{ end }}
+      <div class="card-content">
+        <h3>{{ .Title }}</h3>
+        <p>{{ .Summary | truncate 100 }}</p>
+        <small>{{ .Date.Format "02 Jan 2006" }}</small>
+      </div>
+    </a>
+    {{ end }}
+  </div>
+</div>
+{{ end }}

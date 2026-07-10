@@ -1,0 +1,9 @@
+<footer class="site-footer">
+  <p>&copy; {{ now.Year }} {{ .Site.Params.author }}. Built with Hugo.</p>
+  <div class="social-links">
+    {{ if .Site.Params.socials.github }}<a href="{{ .Site.Params.socials.github }}" target="_blank">GitHub</a>{{ end }}
+    {{ if .Site.Params.socials.linkedin }}<a href="{{ .Site.Params.socials.linkedin }}" target="_blank">LinkedIn</a>{{ end }}
+    {{ if .Site.Params.socials.rss }}<a href="{{ .Site.Params.socials.rss }}">RSS</a>{{ end }}
+  </div>
+</footer>
+<script src="/js/copy-code.js"></script>

@@ -1,0 +1,68 @@
+baseURL: "https://duynch.com/"
+title: "DuyNguyen | System Administrator"
+defaultContentLanguage: "vi"
+defaultContentLanguageInSubdir: false
+
+languages:
+  vi:
+    label: "Tiếng Việt"
+    title: "DuyNguyen | System Administrator"
+    weight: 1
+    menu:
+      main:
+        - name: "Trang chủ"
+          url: "/"
+          weight: 1
+        - name: "Bài viết"
+          url: "/blog/"
+          weight: 2
+  en:
+    label: "English"
+    title: "DuyNguyen | System Administrator"
+    weight: 2
+    menu:
+      main:
+        - name: "Home"
+          url: "/en/"
+          weight: 1
+        - name: "Blog"
+          url: "/en/blog/"
+          weight: 2
+
+pagination:
+  pagerSize: 9
+
+enableRobotsTXT: true
+enableGitInfo: false
+
+taxonomies:
+  tag: tags
+  category: categories
+  series: series
+
+permalinks:
+  blog: "/blog/:year/:month/:slug/"
+  projects: "/projects/:slug/"
+
+markup:
+  goldmark:
+    renderer:
+      unsafe: true
+  highlight:
+    style: "catppuccin-mocha"
+    lineNos: true
+    codeFences: true
+    guessSyntax: true
+
+outputs:
+  home: ["HTML", "RSS"]
+  section: ["HTML", "RSS"]
+
+params:
+  author: "Nguyễn Châu Hiếu Duy"
+  avatar: "/images/me.jpg"
+  description: "System Administrator specializing in Cloud Native, OpenShift, Identity & Security."
+  socials:
+    github: "https://github.com/duyaccel"
+    linkedin: "https://linkedin.com/in/duy-nguyễn-49289b27a"
+    rss: "/index.xml"

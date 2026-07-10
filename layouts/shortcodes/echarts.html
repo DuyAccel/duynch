@@ -1,0 +1,21 @@
+<div id="echart-{{ .Ordinal }}" style="width: 100%; height: {{ .Get "height" | default "400px" }};"></div>
+<script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    var chartDom = document.getElementById('echart-{{ .Ordinal }}');
+    var theme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';
+    var myChart = echarts.init(chartDom, theme);
+    var option = {{ .Inner | safeJS }};
+    
+    // If background is transparent in dark mode, let's enforce it
+    if(theme === 'dark' && !option.backgroundColor) {
+        option.backgroundColor = 'transparent';
+    }
+
+    myChart.setOption(option);
+    
+    window.addEventListener('resize', function() {
+      myChart.resize();
+    });
+  });
+</script>
