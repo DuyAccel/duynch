@@ -36,11 +36,16 @@ To run this project locally, you need to install [Hugo Extended](https://gohugo.
 
 ## CI/CD Pipeline
 
-The project uses GitHub Actions for continuous deployment. Upon pushing to the `main` branch, the pipeline automatically:
-1. Builds the static site using Hugo.
-2. Packages the output into a lightweight NGINX Docker container.
-3. Pushes the image to Docker Hub.
-4. SSHs into the production EC2 instance to pull and deploy the new container.
+The deployment process follows a GitOps approach, separated into two repositories:
+
+### Source Code Repo
+- Commit and push changes to the `feature` branch.
+- Open a Pull Request to merge into the `main` branch.
+
+### Infra Repo
+- Update the infrastructure manifest and image tag.
+- Push changes to the `main` branch.
+- FluxCD automatically reconciles and applies the changes to production.
 
 ## Author
 
