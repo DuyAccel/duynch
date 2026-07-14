@@ -18,6 +18,23 @@
       <div class="post-content">
         {{ .Content }}
       </div>
+
+      {{ if or .NextInSection .PrevInSection }}
+      <div class="post-navigation" style="display: flex; justify-content: space-between; margin-top: 3rem; padding-top: 1.5rem; border-top: 1px solid var(--text-color, #ccc); font-size: 0.95rem;">
+        <div class="prev-post" style="flex: 1; text-align: left;">
+          {{ with .NextInSection }}
+          <small style="display: block; opacity: 0.7;">&larr; Bài trước</small>
+          <a href="{{ .Permalink }}" title="{{ .Title }}" style="text-decoration: none; font-weight: 600;">{{ .Title }}</a>
+          {{ end }}
+        </div>
+        <div class="next-post" style="flex: 1; text-align: right;">
+          {{ with .PrevInSection }}
+          <small style="display: block; opacity: 0.7;">Bài tiếp &rarr;</small>
+          <a href="{{ .Permalink }}" title="{{ .Title }}" style="text-decoration: none; font-weight: 600;">{{ .Title }}</a>
+          {{ end }}
+        </div>
+      </div>
+      {{ end }}
     </div>
 
     {{ if and .Params.toc (ne .Params.toc false) }}
