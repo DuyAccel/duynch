@@ -14,7 +14,7 @@ COPY . .
 RUN hugo --minify --gc
 
 # Stage 2: Serve the site using unprivileged Nginx (Secure by default, non-root)
-FROM ghcr.io/nginx/nginx-unprivileged:1.30.3-trixie-perl
+FROM ghcr.io/nginx/nginx-unprivileged:1.31.8-trixie-perl
 
 # Copy the built output from Stage 1 to Nginx HTML directory and set ownership to nginx user (UID 101)
 COPY --from=builder --chown=101:101 /src/public /usr/share/nginx/html

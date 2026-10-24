@@ -594,6 +594,11 @@ pre, code {
   color: var(--text-color);
 }
 
+.post-content p,
+.list-content p {
+  text-align: justify;
+}
+
 .post-sidebar {
   display: none;
 }
