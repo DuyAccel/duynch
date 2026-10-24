@@ -15,9 +15,19 @@ RUN hugo --minify --gc
 
 # Stage 2: Serve the site using unprivileged Nginx (Secure by default, non-root)
 FROM ghcr.io/nginx/nginx-unprivileged:1.31.8-trixie-perl
+# Temporarily switch to root to patch the vulnerable package
+USER root
+
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends --only-upgrade libbrotli1 \
+    && dpkg-query -W -f='${Version}\n' libbrotli1 \
+    && rm -rf /var/lib/apt/lists/*
 
 # Copy the built output from Stage 1 to Nginx HTML directory and set ownership to nginx user (UID 101)
 COPY --from=builder --chown=101:101 /src/public /usr/share/nginx/html
+
+# Restore the unprivileged runtime user
+USER 101
 
 # Expose port 8080 (unprivileged port)
 EXPOSE 8080
